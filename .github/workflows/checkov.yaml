@@ -1,8 +1,11 @@
-name: Checkov
-on:
+name:  checkov
+on: 
+  # this can be trigger based on both master and main branch.
   push:
-    branches:
-      - master
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 jobs:
   build:
 
