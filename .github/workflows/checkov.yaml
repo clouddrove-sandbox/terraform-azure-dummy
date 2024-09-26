@@ -19,3 +19,4 @@ jobs:
         with:
           directory: examples/complete
           framework: terraform 
+          output_format : github_failed_only
