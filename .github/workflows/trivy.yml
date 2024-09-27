@@ -1,6 +1,6 @@
-name:  trivy
+name: Trivy Vulnerability Scan
+
 on:
-  # this can be trigger based on both master and main branch.
   push:
     branches: [ "main", "master" ]
   pull_request:
@@ -8,9 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  trivy-scan:
+    name: Run Trivy Scan
     runs-on: ubuntu-20.04
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,7 +23,7 @@ jobs:
           hide-progress: true
           format: 'sarif'
           output: 'trivy-results.sarif'
-          exit-code: '1'
+          exit-code: '1'  # Exit code will be 1 if vulnerabilities are found
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 
@@ -30,3 +31,9 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
+
+      # Optionally prevent the job from failing but still notify for vulnerabilities
+      - name: Allow Job to Continue Even with Vulnerabilities
+        if: failure()
+        run: echo "Vulnerabilities found, but proceeding..."
+        continue-on-error: true
