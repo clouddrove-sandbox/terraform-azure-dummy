@@ -1,9 +1,7 @@
 data "azurerm_client_config" "current" {}
 
 
-##----------------------------------------------------------------------------- 
-## Labels module callled that will be used for naming and tags.   
-##-----------------------------------------------------------------------------
+
 module "labels" {
   source      = "clouddrove/labels/azure"
   version     = "1.0.0"
@@ -15,10 +13,7 @@ module "labels" {
   extra_tags  = var.extra_tags
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create Storage Account resource with custormer managed key encryption and its components.  
-## To create storage account with cmk(customer managed key) encryption set 'var.default_enabled = false'. 
-##-----------------------------------------------------------------------------
+
 resource "azurerm_storage_account" "storage" {
   provider                          = azurerm.main_sub
   count                             = var.enabled ? 1 : 0
@@ -208,10 +203,7 @@ resource "azurerm_storage_account" "storage" {
   }
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create user assigned identity in your azure environment. 
-## This user assigned identity will be created when storage account with cmk is created.    
-##-----------------------------------------------------------------------------
+
 resource "azurerm_user_assigned_identity" "identity" {
   provider            = azurerm.main_sub
   count               = var.enabled && var.cmk_encryption_enabled ? 1 : 0
@@ -221,9 +213,7 @@ resource "azurerm_user_assigned_identity" "identity" {
   tags                = module.labels.tags
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will assign 'Key Vault Crypto Service Encryption User' role to user assigned identity created above. 
-##-----------------------------------------------------------------------------
+
 resource "azurerm_role_assignment" "identity_assigned" {
   provider             = azurerm.main_sub
   depends_on           = [azurerm_user_assigned_identity.identity]
@@ -233,10 +223,7 @@ resource "azurerm_role_assignment" "identity_assigned" {
   role_definition_name = "Key Vault Crypto Service Encryption User"
 }
 
-##-----------------------------------------------------------------------------
-## Below resource will provide user access on key vault based on role base access in azure environment.
-## if rbac is enabled then below resource will create. 
-##-----------------------------------------------------------------------------
+
 resource "azurerm_role_assignment" "rbac_keyvault_crypto_officer" {
   provider = azurerm.main_sub
   for_each = toset(var.key_vault_rbac_auth_enabled && var.enabled && var.cmk_encryption_enabled ? var.admin_objects_ids : [])
@@ -246,9 +233,7 @@ resource "azurerm_role_assignment" "rbac_keyvault_crypto_officer" {
   principal_id         = each.value
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create key vault key that will be used for encryption.  
-##-----------------------------------------------------------------------------
+
 resource "azurerm_key_vault_key" "kvkey" {
   provider        = azurerm.main_sub
   depends_on      = [azurerm_role_assignment.identity_assigned, azurerm_role_assignment.rbac_keyvault_crypto_officer]
@@ -280,9 +265,7 @@ resource "azurerm_key_vault_key" "kvkey" {
   }
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create network rules for storage account.  
-##-----------------------------------------------------------------------------
+
 resource "azurerm_storage_account_network_rules" "network-rules" {
   provider                   = azurerm.main_sub
   for_each                   = var.enabled ? { for rule in var.network_rules : rule.default_action => rule } : {}
@@ -300,9 +283,7 @@ resource "azurerm_storage_account_network_rules" "network-rules" {
   }
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create threat protection for storage account. 
-##-----------------------------------------------------------------------------
+
 resource "azurerm_advanced_threat_protection" "atp" {
   provider           = azurerm.main_sub
   count              = var.enabled && var.enable_advanced_threat_protection ? 1 : 0
@@ -310,10 +291,7 @@ resource "azurerm_advanced_threat_protection" "atp" {
   enabled            = var.enable_advanced_threat_protection
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create access policy for user whose object id will be mentioned. 
-## This resource is not required when key vault has role based authorization(rbac) enabled.  
-##-----------------------------------------------------------------------------
+
 resource "azurerm_key_vault_access_policy" "keyvault-access-policy" {
   provider     = azurerm.main_sub
   count        = var.enabled && var.key_vault_rbac_auth_enabled == false ? 1 : 0
@@ -352,9 +330,7 @@ resource "azurerm_key_vault_access_policy" "keyvault-access-policy" {
   ]
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create container in storage account.
-##-----------------------------------------------------------------------------
+
 resource "azurerm_storage_container" "container" {
   provider              = azurerm.main_sub
   count                 = var.enabled ? length(var.containers_list) : 0
