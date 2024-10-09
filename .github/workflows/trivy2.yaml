@@ -1,0 +1,55 @@
+name: Trivy Terraform Scan and Comment on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Trivy
+      run: |
+        sudo apt-get install wget -y
+        wget https://github.com/aquasecurity/trivy/releases/download/v0.56.1/trivy_0.56.1_Linux-64bit.deb
+        sudo dpkg -i trivy_0.56.1_Linux-64bit.deb
+
+    - name: Scan Terraform code for misconfigurations
+      run: |
+        trivy config --format json --output trivy-results.json .
+
+    - name: Output Trivy Scan Summary
+      run: |
+        cat trivy-results.json
+
+    - name: Post Trivy scan results as PR comment
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const resultFile = 'trivy-results.json';
+          let results = 'Trivy Terraform scan results:\n\n';
+          if (fs.existsSync(resultFile)) {
+            const data = JSON.parse(fs.readFileSync(resultFile, 'utf8'));
+            const misconfigurations = data.Results.flatMap(result => result.Misconfigurations || []);
+            if (misconfigurations.length === 0) {
+              results += 'No misconfigurations found 🎉';
+            } else {
+              misconfigurations.forEach(misconfig => {
+                results += `- **${misconfig.Severity}**: ${misconfig.Message} (${misconfig.RuleID}) in ${misconfig.Namespace}\n`;
+              });
+            }
+          } else {
+            results += 'Error: No Trivy results found.';
+          }
+          
+          github.rest.issues.createComment({
+            issue_number: context.payload.pull_request.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: results
+          });
