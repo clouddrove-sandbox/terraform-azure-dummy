@@ -5,6 +5,11 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  checkov:
+    uses: clouddrove/github-shared-workflows/.github/workflows/checkov.yml@master # shared workflow 
+    with:
+     directory: ./
+     continue_on_error: true
   trivy-scan:
     runs-on: ubuntu-latest
 
