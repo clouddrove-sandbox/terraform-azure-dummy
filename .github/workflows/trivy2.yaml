@@ -9,7 +9,7 @@ jobs:
     uses: clouddrove/github-shared-workflows/.github/workflows/checkov.yml@master # shared workflow 
     with:
      directory: ./
-     continue_on_error: true
+     continue_on_error: true #action will continue on error
   trivy-scan:
     runs-on: ubuntu-latest
 
