@@ -61,7 +61,7 @@ jobs:
         uses: bridgecrewio/checkov-action@v12.1347.0
         with:
           directory: ${{ inputs.directory }}
-          output_format: cli
+          output_format: github_failed_only
           soft_fail: ${{ inputs.continue_on_error }}
           download_external_modules: false
           # config_file: .checkov.yml
