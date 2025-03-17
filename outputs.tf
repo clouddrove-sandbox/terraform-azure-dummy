@@ -1,3 +1,8 @@
+
+
+
+
+
 output "storage_account_id" {
   value       = try(azurerm_storage_account.storage[0].id, null)
   description = "The ID of the storage account."
