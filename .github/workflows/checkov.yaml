@@ -24,8 +24,13 @@
 ---
 name: checkov
 # Controls when the workflow will run
+
+
 on:
-  # Allows manual triggering of the workflow
+  # Runs on pull requests
+  pull_request:
+    branches:
+      - master  # Adjust to your default branch
   workflow_dispatch:
     inputs:
       directory:
