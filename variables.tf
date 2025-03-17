@@ -1,5 +1,5 @@
 #Module      : LABEL wecf3ec
-#Description : Terraform label module variables.
+#Description : Terraform label modu decle variables.
 variable "name" {
   type        = string
   default     = ""
