@@ -64,7 +64,7 @@ jobs:
           output_format: cli,sarif
           soft_fail: ${{ inputs.continue_on_error }}
           download_external_modules: false
-          config_file: .checkov.yml
+          # config_file: .checkov.yml
 
       # - name: Upload SARIF file
       #   uses: github/codeql-action/upload-sarif@v3
