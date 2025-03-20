@@ -121,4 +121,9 @@ jobs:
            name: checkov-results
            path: results.sarif
 
+       - name: Upload JSON results
+         uses: actions/upload-artifact@v3
+         with:
+           name: checkov-results-json
+           path: results.json
 
