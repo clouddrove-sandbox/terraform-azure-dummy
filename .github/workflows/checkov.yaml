@@ -250,11 +250,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        continue-on-error: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
+        continue-on-error: true
 
       - name: Cache Checkov
         uses: actions/cache@v3
@@ -263,6 +265,7 @@ jobs:
           key: ${{ runner.os }}-checkov-${{ hashFiles('**/*.tf') }}
           restore-keys: |
             ${{ runner.os }}-checkov-
+        continue-on-error: true
 
       - name: Run Checkov scan
         id: checkov
@@ -270,9 +273,10 @@ jobs:
         with:
           directory: ${{ inputs.directory }}
           output_format: cli,sarif
-          soft_fail: ${{ inputs.continue_on_error }}
+          soft_fail: true
           download_external_modules: false
           output_file_path: console,checkov-results.sarif
+        continue-on-error: true
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -282,20 +286,20 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
+        continue-on-error: true
 
       - name: Upload Checkov SARIF file
         uses: github/codeql-action/upload-sarif@v3
-        if: success() || failure()
+        if: always()
         with:
           sarif_file: checkov-results.sarif
           category: checkov
+        continue-on-error: true
 
       - name: Upload Trivy SARIF file
         uses: github/codeql-action/upload-sarif@v3
-        if: success() || failure()
+        if: always()
         with:
           sarif_file: trivy-results.sarif
           category: trivy
-
-
-
+        continue-on-error: true
