@@ -77,7 +77,69 @@
       #   if: success() || failure()
       #   with:
       #     sarif_file: results.sarif
-name: checkov
+# name: checkov
+
+# on:
+#   pull_request:
+#     branches:
+#       - master
+#   workflow_dispatch:
+#     inputs:
+#       directory:
+#         required: true
+#         type: string
+#         default: '.'
+#       continue_on_error:
+#         required: true
+#         type: string
+#         default: 'true'
+#       var_file:
+#         required: false
+#         type: string
+
+# jobs:
+#   scan:
+#     permissions:
+#       contents: read
+#       security-events: write
+#       actions: read
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v4
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.8'
+
+#       - name: Cache Checkov
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.checkov
+#           key: ${{ runner.os }}-checkov-${{ hashFiles('**/*.tf') }}
+#           restore-keys: |
+#             ${{ runner.os }}-checkov-
+
+#       - name: Run Checkov scan
+#         id: checkov
+#         uses: bridgecrewio/checkov-action@v12
+#         with:
+#           directory: ${{ inputs.directory }}
+#           output_format: cli,sarif
+#           soft_fail: ${{ inputs.continue_on_error }}
+#           download_external_modules: false
+#           output_file_path: console,results.sarif
+
+#       - name: Upload SARIF file
+#         uses: github/codeql-action/upload-sarif@v3
+#         if: success() || failure()
+#         with:
+#           sarif_file: results.sarif
+
+# ----------------==============
+name: Security Scan
 
 on:
   pull_request:
@@ -130,13 +192,30 @@ jobs:
           output_format: cli,sarif
           soft_fail: ${{ inputs.continue_on_error }}
           download_external_modules: false
-          output_file_path: console,results.sarif
+          output_file_path: console,checkov-results.sarif
 
-      - name: Upload SARIF file
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Checkov SARIF file
         uses: github/codeql-action/upload-sarif@v3
         if: success() || failure()
         with:
-          sarif_file: results.sarif
+          sarif_file: checkov-results.sarif
+          category: checkov
+
+      - name: Upload Trivy SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy
 
 
 
