@@ -109,8 +109,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checkov GitHub Action
-        uses: bridgecrewio/checkov-action@v12.1347.0
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Cache Checkov
+        uses: actions/cache@v3
+        with:
+          path: ~/.checkov
+          key: ${{ runner.os }}-checkov-${{ hashFiles('**/*.tf') }}
+          restore-keys: |
+            ${{ runner.os }}-checkov-
+
+      - name: Run Checkov scan
+        id: checkov
+        uses: bridgecrewio/checkov-action@v12
         with:
           directory: ${{ inputs.directory }}
           output_format: cli,sarif
@@ -119,9 +133,10 @@ jobs:
           output_file_path: console,results.sarif
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: success() || failure()
         with:
           sarif_file: results.sarif
+
 
 
