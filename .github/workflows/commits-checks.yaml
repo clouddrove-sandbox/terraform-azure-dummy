@@ -44,6 +44,8 @@ jobs:
               echo "  fix(auth): fix login issue"
               echo "  docs: update README"
               echo "  feat!: breaking change"
+              echo "  chore: clean up unused files"
+              echo "  BREAKING CHANGE: the service is not available in the region."
               invalid_commits=$((invalid_commits + 1))
             else
               echo "✅ Commit follows conventional format"
