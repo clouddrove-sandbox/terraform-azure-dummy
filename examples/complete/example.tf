@@ -62,8 +62,8 @@ module "subnet" {
   virtual_network_name = module.vnet.vnet_name
   service_endpoints    = ["Microsoft.Storage"]
   #subnet
-  subnet_names    = ["subnet1"]
-  subnet_prefixes = ["10.0.1.0/24"]
+  subnet_names    = ["subnet2"]
+  subnet_prefixes = ["10.0.4.0/24"]
 }
 
 ##----------------------------------------------------------------------------- 
@@ -160,7 +160,7 @@ module "storage" {
 
   ##   Storage Container
   containers_list = [
-    { name = "app-test", access_type = "private" },
+    { name = "app-car", access_type = "private" },
   ]
   tables = ["table1"]
   queues = ["queue1"]
