@@ -1,0 +1,53 @@
+name: 'Validate PR title'
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened  # Added to validate when PRs are reopened
+  push:
+    branches:
+      - 'feat/stale-workflow'  # Added to trigger on push to this branch
+
+jobs:
+  main:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read  # Required to read PR information
+      statuses: write      # Required to update PR status
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5.5.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Configure which types are allowed
+          types: |
+            fix
+            feat
+            docs
+            ci
+            chore
+            test
+            refactor
+            style
+            perf
+            build
+            revert
+          # Configure that a scope must always be provided
+          requireScope: false
+          # Ensure the subject starts with an uppercase character
+          subjectPattern: ^[A-Z].+$
+          # Error message when the pattern doesn't match
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            starts with an uppercase character.
+          # Allow work-in-progress PRs with [WIP] prefix
+          wip: true
+          # Don't validate commit messages for single-commit PRs
+          validateSingleCommit: false
+          # Allow using GitHub's default scopes in PR titles
+          scopes: |
+            *
