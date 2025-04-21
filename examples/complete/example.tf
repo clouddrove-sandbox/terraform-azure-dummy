@@ -160,7 +160,7 @@ module "storage" {
 
   ##   Storage Container
   containers_list = [
-    { name = "app-test", access_type = "private" },
+    { name = "app-car", access_type = "private" },
   ]
   tables = ["table1"]
   queues = ["queue1"]
