@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Fixed cron syntax (5 asterisks needed)
   workflow_dispatch:  # Added manual trigger option
+  push:
+    branches:
+      - 'feat/stale-workflow'  
 jobs:
   stale:
     runs-on: ubuntu-latest
