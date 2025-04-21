@@ -2,7 +2,7 @@ name: Validate Commit Messages
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ feat/commit-check ]
 
 jobs:
   validate-commits:
