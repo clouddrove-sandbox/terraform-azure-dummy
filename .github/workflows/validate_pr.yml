@@ -11,7 +11,7 @@ on:
       - 'feat/stale-workflow'  # Added to trigger on push to this branch
 
 jobs:
-  main:
+  main: 
     name: Validate PR title
     runs-on: ubuntu-latest
     permissions:
