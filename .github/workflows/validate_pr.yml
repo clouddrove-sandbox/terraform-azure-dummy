@@ -6,17 +6,17 @@ on:
       - edited
       - synchronize
       - reopened  # Added to validate when PRs are reopened
-  push:
-    branches:
-      - 'feat/stale-workflow'  # Added to trigger on push to this branch
+  # push:
+  #   branches:
+  #     - 'feat/stale-workflow'  # Added to trigger on push to this branch
 
 jobs:
   main:
     name: Validate PR title
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read  # Required to read PR information
-      statuses: write      # Required to update PR status
+    # permissions:
+    #   pull-requests: read  # Required to read PR information
+    #   statuses: write      # Required to update PR status
     steps:
       - uses: amannn/action-semantic-pull-request@v5.5.3
         env:
