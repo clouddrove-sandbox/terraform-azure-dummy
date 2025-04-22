@@ -5,7 +5,7 @@ on:
       - opened
       - edited
       - synchronize
-      - reopened  # Added to validate when PRs are reopened
+      - reopened  # Added to validate when PRs are reopened  
   push:
     branches:
       - 'feat/stale-workflow'  # Added to trigger on push to this branch
