@@ -48,6 +48,6 @@ jobs:
           wip: true
           # Don't validate commit messages for single-commit PRs
           validateSingleCommit: false
-          # Allow using GitHub's default scopes in PR titles
+          # Allow using GitHub's default scopes in PR titles  
           scopes: |
             *
