@@ -51,10 +51,35 @@ jobs:
           # Allow using GitHub's default scopes in PR titles
           scopes: |
             *
+
   validate-commits:
     runs-on: ubuntu-latest
     steps:
-      - uses: wagoid/commitlint-github-action@v5
+      - uses: actions/checkout@v4
         with:
-          # Optional: Use a specific config (default: @commitlint/config-conventional)
-          config: "@commitlint/config-conventional"
+          fetch-depth: 0  # Required to check all commits in PR
+
+      - name: Validate Commit Messages
+        uses: webiny/action-conventional-commits@v1
+        with:
+          # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
+          subject_case: false  # Disables strict lowercase enforcement
+          # Optional: Customize allowed commit types (default: conventional)
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            revert
+
+  # validate-commits:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: wagoid/commitlint-github-action@v5
+  #       with:
+  #         # Optional: Use a specific config (default: @commitlint/config-conventional)
+  #         config: "@commitlint/config-conventional"
