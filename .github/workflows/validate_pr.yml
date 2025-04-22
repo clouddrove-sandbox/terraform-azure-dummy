@@ -63,7 +63,7 @@ jobs:
         uses: webiny/action-conventional-commits@v1.3.0
         with:
           # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
-          subject_case: false  # Disables strict lowercase enforcement
+          # subject_case: false  # Disables strict lowercase enforcement
           # Optional: Customize allowed commit types (default: conventional)
           types: |
             feat
