@@ -62,10 +62,7 @@ jobs:
       - name: Validate Commit Messages
         uses: webiny/action-conventional-commits@v1.3.0
         with:
-          # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
-          # subject_case: false  # Disables strict lowercase enforcement
-          # Optional: Customize allowed commit types (default: conventional)
-          types: |
+          allowed-commit-types: |
             feat
             fix
             docs
@@ -74,7 +71,24 @@ jobs:
             perf
             test
             chore
-            revert  
+            revert
+
+      # - name: Validate Commit Messages
+      #   uses: webiny/action-conventional-commits@v1.3.0
+      #   with:
+      #     # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
+      #     # subject_case: false  # Disables strict lowercase enforcement
+      #     # Optional: Customize allowed commit types (default: conventional)
+      #     types: |
+      #       feat
+      #       fix
+      #       docs
+      #       style
+      #       refactor
+      #       perf
+      #       test
+      #       chore
+      #       revert  
 
   # validate-commits:
   #   runs-on: ubuntu-latest
