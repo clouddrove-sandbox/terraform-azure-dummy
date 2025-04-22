@@ -15,6 +15,8 @@ module "labels" {
   extra_tags  = var.extra_tags
 }
 
+
+
 ##----------------------------------------------------------------------------- 
 ## Below resource will create Storage Account resource with custormer managed key encryption and its components.  
 ## To create storage account with cmk(customer managed key) encryption set 'var.default_enabled = false'. 
