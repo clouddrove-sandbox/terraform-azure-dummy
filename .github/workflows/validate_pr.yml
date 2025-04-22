@@ -60,7 +60,7 @@ jobs:
           fetch-depth: 0  # Required to check all commits in PR
 
       - name: Validate Commit Messages
-        uses: webiny/action-conventional-commits@v1
+        uses: webiny/action-conventional-commits@v1.3.0
         with:
           # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
           subject_case: false  # Disables strict lowercase enforcement
