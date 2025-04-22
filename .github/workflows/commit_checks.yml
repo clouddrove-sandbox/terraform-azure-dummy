@@ -1,0 +1,67 @@
+name: Validate Commit Messages
+
+on:
+  pull_request:
+    branches: [ feat/commit-check ]
+
+jobs:
+  validate-commits:
+    name: Validate Commit Code
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for checking all commits in PR
+      
+      - name: Validate code commits
+        run: |
+          echo '#!/bin/bash
+          
+          # Define regex pattern for conventional commits
+          conventional_format="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\([a-z0-9-]+\\))?!?: .+$"
+          
+          # Only run for pull requests
+          echo "Validating commits in pull request..."
+          commits=$(git log --format=%H ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          
+          invalid_commits=0
+          
+          # Check each commit
+          for commit in $commits; do
+            commit_msg=$(git log -1 --format=%B $commit)
+            commit_first_line=$(echo "$commit_msg" | head -n 1)
+            
+            echo "Checking commit: $commit"
+            echo "Message: $commit_first_line"
+            
+            if ! [[ $commit_first_line =~ $conventional_format ]]; then
+              echo "❌ Commit $commit does not follow conventional format!"
+              echo "Required format: type(scope?): description"
+              echo "Examples of valid formats:"
+              echo "  feat: add new feature"
+              echo "  fix(auth): fix login issue"
+              echo "  docs: update README"
+              echo "  feat!: breaking change"
+              echo "  chore: clean up unused files"
+              echo "  BREAKING CHANGE: the service is not available in the region."
+              invalid_commits=$((invalid_commits + 1))
+            else
+              echo "✅ Commit follows conventional format"
+            fi
+            echo "-----------------------------------"
+          done
+          
+          if [[ $invalid_commits -gt 0 ]]; then
+            echo "❌ Found $invalid_commits commits that do not follow conventional format!"
+            exit 1
+          else
+            echo "✅ All commits follow conventional format!"
+            exit 0
+          fi' > validate-commits.sh
+          
+          chmod +x validate-commits.sh
+      
+      - name: Validate commit messages
+        run: ./validate-commits.sh

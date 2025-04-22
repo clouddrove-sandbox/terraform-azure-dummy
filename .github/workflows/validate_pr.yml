@@ -51,3 +51,10 @@ jobs:
           # Allow using GitHub's default scopes in PR titles
           scopes: |
             *
+  validate-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wagoid/commitlint-github-action@v5
+        with:
+          # Optional: Use a specific config (default: @commitlint/config-conventional)
+          config: "@commitlint/config-conventional"
