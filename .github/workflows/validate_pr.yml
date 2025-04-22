@@ -50,4 +50,4 @@ jobs:
           validateSingleCommit: false
           # Allow using GitHub's default scopes in PR titles  
           scopes: |
-            *
+            *   
