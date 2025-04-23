@@ -60,18 +60,35 @@ jobs:
           fetch-depth: 0
 
       - name: Validate Commit Messages
-        uses: webiny/action-conventional-commits@v1.3.0
+        uses: wagoid/commitlint-github-action@v6
         with:
-          allowed-commit-types: |  
-            feat
-            fix
-            docs
-            style
-            refactor
-            perf
-            test
-            chore
-            revert            
+          config: '{
+            "extends": ["@commitlint/config-conventional"],
+            "rules": {
+              "subject-case": [0]  # 🔥 Disables case checks entirely
+            }
+          }'
+
+  # validate-commits:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Validate Commit Messages
+  #       uses: webiny/action-conventional-commits@v1.3.0
+  #       with:
+  #         allowed-commit-types: |  
+  #           feat
+  #           fix
+  #           docs
+  #           style
+  #           refactor
+  #           perf
+  #           test
+  #           chore
+  #           revert            
 
   # validate-commits:
   #   runs-on: ubuntu-latest
