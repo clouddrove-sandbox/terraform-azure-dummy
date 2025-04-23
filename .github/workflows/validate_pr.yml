@@ -60,7 +60,7 @@ jobs:
           fetch-depth: 0  # Required to check all commits in PR
 
       - name: Validate Commit Messages (Regex-Based)
-        uses: TypoCI/commit-message-checker@v1
+        uses: gsactions/commit-message-checker@v2
         with:
           pattern: ^(feat|fix|docs|style|refactor|perf|test|chore|revert)(\(\w+\))?!?: [A-Z].+$
           error_message: "Commit message must follow: 'type(scope?): Description' (first letter capitalized)"
