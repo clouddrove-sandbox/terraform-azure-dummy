@@ -53,22 +53,22 @@ jobs:
             *
 
   validate-commits:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - name: Validate Commit Messages
-        uses: wagoid/commitlint-github-action@v6
-          with:
-            config: '{
-              "extends": ["@commitlint/config-conventional"],
-              "rules": {
-                "subject-case": [2, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
-                "type-case": [2, "always", "lower-case"]
-              }
-            }'
+    - name: Validate Commit Messages
+      uses: wagoid/commitlint-github-action@v6
+      with:
+        config: '{
+          "extends": ["@commitlint/config-conventional"],
+          "rules": {
+            "subject-case": [2, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
+            "type-case": [2, "always", "lower-case"]
+          }
+        }'
 
   # validate-commits:
   #   runs-on: ubuntu-latest
