@@ -6,4 +6,6 @@ on:
 jobs:
   validate:
     uses: clouddrove/github-shared-workflows/.github/workflows/pr_validation.yml@feat/pr-validation
+    with:
+      allowed_types: 'fix,feat,docs,ci,chore,test,refactor,style,perf,build,revert' 
     secrets: inherit
