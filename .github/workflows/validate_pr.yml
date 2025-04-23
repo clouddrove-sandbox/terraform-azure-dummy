@@ -60,12 +60,13 @@ jobs:
           fetch-depth: 0
 
       - name: Validate Commit Messages
-        uses: wagoid/commitlint-github-action@v6
+        uses: wagoid/commitlint-github-action@1.
         with:
           config: '{
             "extends": ["@commitlint/config-conventional"],
             "rules": {
-              "subject-case": [0]  # 🔥 Disables case checks entirely
+              "subject-case": [0],
+              "header-case": [0]
             }
           }'
 
