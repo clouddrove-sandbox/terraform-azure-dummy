@@ -61,13 +61,14 @@ jobs:
 
       - name: Validate Commit Messages
         uses: wagoid/commitlint-github-action@v6
-        with:
-          config: '{
-          "extends": ["@commitlint/config-conventional"],
-          "rules": {
-            "subject-case": [2, "always", ["sentence-case", "lower-case"]]
-          }
-        }'
+          with:
+            config: '{
+              "extends": ["@commitlint/config-conventional"],
+              "rules": {
+                "subject-case": [2, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
+                "type-case": [2, "always", "lower-case"]
+              }
+            }'
 
   # validate-commits:
   #   runs-on: ubuntu-latest
