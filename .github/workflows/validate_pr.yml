@@ -92,7 +92,7 @@ jobs:
             perf
             test
             chore
-            revert  
+            revert    
 
   # validate-commits:
   #   runs-on: ubuntu-latest
