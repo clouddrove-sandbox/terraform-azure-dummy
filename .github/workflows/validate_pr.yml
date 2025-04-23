@@ -57,18 +57,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Required to check all commits in PR
 
-      - name: Validate Commit Messages
-        uses: wagoid/commitlint-github-action@v6
+      - name: Validate Commit Messages (Regex-Based)
+        uses: TypoCI/commit-message-checker@v1
         with:
-          config: '{
-            "extends": ["@commitlint/config-conventional"],
-            "rules": {
-              "subject-case": [0],
-              "header-case": [0]
-            }
-          }'
+          pattern: ^(feat|fix|docs|style|refactor|perf|test|chore|revert)(\(\w+\))?!?: [A-Z][a-zA-Z0-9 -]+$
+          error_message: "Commit message must follow: 'type(scope?): Description' (first letter capitalized)"
+
+  # validate-commits:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Validate Commit Messages
+  #       uses: wagoid/commitlint-github-action@v6
+  #       with:
+  #         config: '{
+  #           "extends": ["@commitlint/config-conventional"],
+  #           "rules": {
+  #             "subject-case": [0],
+  #             "header-case": [0]
+  #           }
+  #         }'
 
   # validate-commits:
   #   runs-on: ubuntu-latest
