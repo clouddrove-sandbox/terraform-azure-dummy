@@ -57,15 +57,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for checking all commits in a PR
+          fetch-depth: 0  # Required to check all commits in PR
 
-      - name: Validate Conventional Commits
-        uses: agenthunt/conventional-commit-checker-action@v1.0.0
+      - name: Validate Commit Messages
+        uses: webiny/action-conventional-commits@v1.3.0
         with:
-          # Optional: Customize allowed types (default: conventional commit types)
-          allowed_types: "feat,fix,docs,style,refactor,perf,test,chore,revert"
-          # Optional: Set to 'false' to allow capitalized subjects (e.g., "feat: Added")
-          enforce_lowercase: false  # ← Key setting for your use case
+          # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
+          subject_case: false  # Disables strict lowercase enforcement
+          # Optional: Customize allowed commit types (default: conventional)
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            revert   
+
+  # validate-commits:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # Required for checking all commits in a PR
+
+  #     - name: Validate Conventional Commits
+  #       uses: agenthunt/conventional-commit-checker-action@v1.0.0
+  #       with:
+  #         # Optional: Customize allowed types (default: conventional commit types)
+  #         allowed_types: "feat,fix,docs,style,refactor,perf,test,chore,revert"
+  #         # Optional: Set to 'false' to allow capitalized subjects (e.g., "feat: Added")
+  #         enforce_lowercase: false  # ← Key setting for your use case
 
 
   # validate-commits:
@@ -123,31 +147,7 @@ jobs:
   #             "subject-case": [2, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
   #             "type-case": [2, "always", "lower-case"]
   #           }
-  #         }'
-
-  # validate-commits:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0  # Required to check all commits in PR
-
-  #     - name: Validate Commit Messages
-  #       uses: webiny/action-conventional-commits@v1.3.0
-  #       with:
-  #         # Allow first letter uppercase (e.g., "fix: Added" instead of "fix: added")
-  #         subject_case: false  # Disables strict lowercase enforcement
-  #         # Optional: Customize allowed commit types (default: conventional)
-  #         types: |
-  #           feat
-  #           fix
-  #           docs
-  #           style
-  #           refactor
-  #           perf
-  #           test
-  #           chore
-  #           revert    
+  #         }' 
 
   # validate-commits:
   #   runs-on: ubuntu-latest
