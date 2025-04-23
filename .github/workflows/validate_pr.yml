@@ -1,4 +1,4 @@
-name: 'Validate PR title'
+name: 'PR Validation'
 on:
   pull_request_target:
     types:
@@ -75,7 +75,6 @@ jobs:
             test
             chore
             revert   
-
   # validate-commits:
   #   runs-on: ubuntu-latest
   #   steps:
