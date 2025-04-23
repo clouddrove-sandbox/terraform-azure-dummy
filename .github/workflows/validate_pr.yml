@@ -57,13 +57,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required to check all commits in PR
+          fetch-depth: 0  # Required for checking all commits in a PR
 
-      - name: Validate Commit Messages (Regex-Based)
-        uses: gsactions/commit-message-checker@v2
+      - name: Validate Conventional Commits
+        uses: agenthunt/conventional-commit-checker-action@v1.0.0
         with:
-          pattern: ^(feat|fix|docs|style|refactor|perf|test|chore|revert)(\(\w+\))?!?: [A-Z].+$
-          error_message: "Commit message must follow: 'type(scope?): Description' (first letter capitalized)"
+          # Optional: Customize allowed types (default: conventional commit types)
+          allowed_types: "feat,fix,docs,style,refactor,perf,test,chore,revert"
+          # Optional: Set to 'false' to allow capitalized subjects (e.g., "feat: Added")
+          enforce_lowercase: false  # ← Key setting for your use case
+
 
   # validate-commits:
   #   runs-on: ubuntu-latest
