@@ -1,7 +1,6 @@
 name: 'PR Validation'
-
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - edited
@@ -9,26 +8,6 @@ on:
       - reopened
 
 jobs:
-  validate:
-    name: Validate PR
+  call-shared-workflow:
     uses: clouddrove/github-shared-workflows/.github/workflows/pr_validation.yml@feat/pr-validation
-    with:
-      # Custom PR types for this specific repository
-      pr-types: |
-        fix
-        feat
-        docs
-        chore
-        ci
-        test
-      # Custom commit types for this specific repository  
-      commit-types: |
-        feat
-        fix
-        docs
-        test
-        chore
-      # Require scope in this repository
-      require-scope: true
-      # Allow WIP PRs
-      wip-allowed: true
+    secrets: inherit
