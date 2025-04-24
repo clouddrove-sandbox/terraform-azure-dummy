@@ -1,11 +1,11 @@
 name: 'PR Validation'
-on:
-  pull_request_target:
-    types:
-      - opened
-      - edited
-      - synchronize
-      - reopened  # Added to validate when PRs are reopened
+# on:
+#   pull_request_target:
+#     types:
+#       - opened
+#       - edited
+#       - synchronize
+#       - reopened  # Added to validate when PRs are reopened
   # push:
   #   branches:
   #     - 'feat/stale-workflow'  # Added to trigger on push to this branch
