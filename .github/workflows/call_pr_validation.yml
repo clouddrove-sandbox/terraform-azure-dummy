@@ -16,3 +16,4 @@ jobs:
         feat
         fix
         chore
+      checkLabels: true
