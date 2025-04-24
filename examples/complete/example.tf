@@ -76,7 +76,7 @@ module "log-analytics" {
   name                             = local.name
   environment                      = local.environment
   label_order                      = local.label_order
-  create_log_analytics_workspace   = false
+  create_log_analytics_workspace   = true
   log_analytics_workspace_sku      = "PerGB2018"
   daily_quota_gb                   = "-1"
   internet_ingestion_enabled       = true
@@ -105,7 +105,7 @@ module "vault" {
   virtual_network_id          = module.vnet.vnet_id
   subnet_id                   = module.subnet.default_subnet_id[0]
   enable_rbac_authorization   = true
-  enabled_for_disk_encryption = false
+  enabled_for_disk_encryption = true
   #private endpoint
   enable_private_endpoint = false
   network_acls            = null
@@ -120,7 +120,7 @@ module "vault" {
   # existing_private_dns_zone_resource_group_name = ""
 
   #### enable diagnostic setting
-  diagnostic_setting_enable  = false
+  diagnostic_setting_enable  = true
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 }
 
@@ -140,14 +140,14 @@ module "storage" {
   label_order                   = local.label_order
   resource_group_name           = module.resource_group.resource_group_name
   location                      = module.resource_group.resource_group_location
-  storage_account_name          = "storage87482"
+  storage_account_name          = "storageq482"
   public_network_access_enabled = true
   account_kind                  = "StorageV2"
   account_tier                  = "Standard"
   admin_objects_ids             = [data.azurerm_client_config.current_client_config.object_id]
 
   ###customer_managed_key can only be set when the account_kind is set to StorageV2 or account_tier set to Premium, and the identity type is UserAssigned.
-  cmk_encryption_enabled = true
+  cmk_encryption_enabled = false
   key_vault_id           = module.vault.id
 
   ########Following to be uncommnented only when using DNS Zone from different subscription along with existing DNS zone.
