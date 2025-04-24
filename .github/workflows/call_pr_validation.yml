@@ -9,7 +9,7 @@ on:
 
 jobs:
   pr-validation:
-    uses: clouddrove/github-shared-workflows/.github/workflows/pr_checks.yml@feat/pr-validation # will be master when pr is merged
+    uses: clouddrove/github-shared-workflows/.github/workflows/pr_checks.yml@master # will be master when pr is merged
     secrets: inherit
     with:
       types: |
