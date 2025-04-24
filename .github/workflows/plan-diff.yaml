@@ -1,0 +1,56 @@
+name: Terraform Plan PR Diff
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'examples/complete/**'
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout PR branch
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init (PR branch)
+      working-directory: examples/complete
+      run: terraform init
+
+    - name: Terraform Plan (PR branch)
+      working-directory: examples/complete
+      run: terraform plan -out=tfplan-pr
+
+    - name: Save PR plan
+      working-directory: examples/complete
+      run: terraform show -no-color tfplan-pr > plan-pr.txt
+
+    - name: Checkout master branch
+      run: |
+        git fetch origin test/terraform-diff
+        git checkout test/terraform-diff
+
+    - name: Terraform Init (master branch)
+      working-directory: examples/complete
+      run: terraform init
+
+    - name: Terraform Plan (master branch)
+      working-directory: examples/complete
+      run: terraform plan -out=tfplan-master
+
+    - name: Save master plan
+      working-directory: examples/complete
+      run: terraform show -no-color tfplan-master > plan-master.txt
+
+    - name: Show Plan Diff
+      working-directory: examples/complete
+      run: |
+        echo "### Terraform Plan Changes" >> $GITHUB_STEP_SUMMARY
+        echo '```diff' >> $GITHUB_STEP_SUMMARY
+        diff -u plan-master.txt plan-pr.txt >> $GITHUB_STEP_SUMMARY || true
+        echo '```' >> $GITHUB_STEP_SUMMARY
