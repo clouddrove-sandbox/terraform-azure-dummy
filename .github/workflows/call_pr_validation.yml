@@ -8,7 +8,7 @@ on:
       - reopened
 
 jobs:
-  call-shared-workflow:
+  pr-validation:
     uses: clouddrove/github-shared-workflows/.github/workflows/pr_validation.yml@feat/pr-validation
     secrets: inherit
     with:
