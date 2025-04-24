@@ -2,13 +2,13 @@
 provider "azurerm" {
   features {}
   storage_use_azuread = true
-  subscription_id     = "01111111111110-11-11-11-11"
+  subscription_id     = "1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
 }
 
 provider "azurerm" {
   features {}
   alias           = "peer"
-  subscription_id = "01111111111110-11-11-11-11"
+  subscription_id = "1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
 }
 
 
@@ -72,7 +72,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
-  version                          = "1.1.0"
+  version                          = "2.0.0"
   name                             = local.name
   environment                      = local.environment
   label_order                      = local.label_order
@@ -90,7 +90,11 @@ module "log-analytics" {
 ##-----------------------------------------------------------------------------
 module "vault" {
   source  = "clouddrove/key-vault/azure"
-  version = "1.1.0"
+  version = "1.2.0"
+  providers = {
+    azurerm.dns_sub  = azurerm.peer, #chagnge this to other alias if dns hosted in other subscription.
+    azurerm.main_sub = azurerm
+  }
 
   name                        = "vae5960581"
   environment                 = "test"
