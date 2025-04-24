@@ -13,7 +13,15 @@ jobs:
     secrets: inherit
     with:
       types: |
-        feat
         fix
+        feat
+        docs
+        ci
         chore
+        test
+        refactor
+        style
+        perf
+        build
+        revert
       checkLabels: true
