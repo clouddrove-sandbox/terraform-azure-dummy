@@ -15,7 +15,7 @@ provider "azurerm" {
 data "azurerm_client_config" "current_client_config" {}
 
 locals {
-  name        = "app-storage-1"
+  name        = "app-str-1"
   environment = "test"
   label_order = ["name", "environment"]
 }
